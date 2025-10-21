@@ -1,8 +1,14 @@
-import numpy as np, pandas as pd, shap
+import numpy as np
+import pandas as pd
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import roc_auc_score
+
+try:
+    import shap  # optional
+except Exception:
+    shap = None
 
 class CreditModel:
     def __init__(self):
@@ -26,16 +32,25 @@ class CreditModel:
     def train(self):
         X, y = self._synthetic()
         Xtr, Xte, ytr, yte = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
-        self.lr.fit(Xtr, ytr); self.rf.fit(Xtr, ytr)
-        self.explainer = shap.TreeExplainer(self.rf)
+        self.lr.fit(Xtr, ytr)
+        self.rf.fit(Xtr, ytr)
+        if shap:
+            try:
+                self.explainer = shap.TreeExplainer(self.rf)
+            except Exception:
+                self.explainer = None
         auc_lr = roc_auc_score(yte, self.lr.predict_proba(Xte)[:,1])
         auc_rf = roc_auc_score(yte, self.rf.predict_proba(Xte)[:,1])
         return {"auc_lr": float(auc_lr), "auc_rf": float(auc_rf)}
 
     def score(self, features: dict):
         cols = ["income","age","utilization","late_pay","dti"]
-        import numpy as np
         x = np.array([[features.get(c,0) for c in cols]])
         prob = float(self.rf.predict_proba(x)[0,1])
-        shap_vals = self.explainer.shap_values(x)[1][0].tolist() if self.explainer else []
+        shap_vals = []
+        if self.explainer and shap:
+            try:
+                shap_vals = self.explainer.shap_values(x)[1][0].tolist()
+            except Exception:
+                shap_vals = []
         return {"prob_default": prob, "shap": {"features": cols, "values": shap_vals}}
