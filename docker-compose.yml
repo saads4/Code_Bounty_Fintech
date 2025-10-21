@@ -1,0 +1,26 @@
+version: "3.9"
+services:
+  postgres:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: finedge
+    ports: [ "5432:5432" ]
+
+  api:
+    build: ./backend
+    environment:
+      - DATABASE_URL=${DATABASE_URL:-sqlite:///./finedge.db}
+      - JWT_SECRET=devsecret
+      - CORS_ALLOW_ORIGINS=http://localhost:5173
+    ports: [ "8000:8000" ]
+    volumes: [ "./backend:/app" ]
+
+  frontend:
+    build: ./frontend
+    environment:
+      - VITE_API_BASE=http://localhost:8000
+    ports: [ "5173:5173" ]
+    volumes: [ "./frontend:/app" ]
