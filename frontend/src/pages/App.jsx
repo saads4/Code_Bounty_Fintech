@@ -5,36 +5,32 @@ import Budget from './Budget.jsx'
 import Credit from './Credit.jsx'
 import Taxes from './Taxes.jsx'
 import FinBot from './FinBot.jsx'
-import { ensureAuth } from '../lib/api.js'
+import Login from './Login.jsx'
+import { logout } from '../lib/api.js'
 
 const TABS = ['Dashboard','Budget','Credit','Taxes','FinBot']
 
 export default function App(){
   const [tab, setTab] = useState('Dashboard')
   const [toast, setToast] = useState('')
-  const [ready, setReady] = useState(false)
+  const [authed, setAuthed] = useState(false)
 
   useEffect(()=>{
-    (async ()=>{
-      try { await ensureAuth(); }
-      catch(e){ setToast(String(e.message || e)) }
-      finally{ setReady(true) }
-    })()
+    const t = localStorage.getItem('token')
+    setAuthed(!!t)
   },[])
 
-  if(!ready){
-    return (
-      <div className="container">
-        <h1>FinEdge Pro</h1>
-        <div className="small">Connecting… ensuring a secure session.</div>
-      </div>
-    )
+  if(!authed){
+    return <Login onLoggedIn={()=>setAuthed(true)} onToast={setToast} />
   }
 
   return (
     <div className="container">
       <h1>FinEdge Pro</h1>
       <div className="small">AI-powered personal finance • India tax ready • ML insights</div>
+      <div style={{marginTop:8, display:'flex', justifyContent:'flex-end'}}>
+        <button className="btn" onClick={()=>{ logout(); setAuthed(false); setToast('Signed out'); }}>Logout</button>
+      </div>
       <div className="nav" style={{marginTop:16}}>
         {TABS.map(t => (
           <div key={t} className={'tab' + (tab===t?' active':'')} onClick={()=>setTab(t)}>{t}</div>

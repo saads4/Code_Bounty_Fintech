@@ -3,6 +3,35 @@ const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:8000';
 
 function getToken(){ return localStorage.getItem('token') || ''; }
 
+// Explicit auth helpers
+async function register(email, password, full_name=''){
+  const r = await fetch(`${API_BASE}/api/auth/register`, {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ email, password, full_name })
+  });
+  if(!r.ok){
+    const txt = await r.text().catch(()=> '');
+    throw new Error(txt || `Register failed (${r.status})`);
+  }
+  const data = await r.json();
+  localStorage.setItem('token', data.access_token);
+  return data;
+}
+
+async function login(email, password){
+  const r = await fetch(`${API_BASE}/api/auth/login`, {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ email, password })
+  });
+  if(!r.ok){
+    const txt = await r.text().catch(()=> '');
+    throw new Error(txt || `Login failed (${r.status})`);
+  }
+  const data = await r.json();
+  localStorage.setItem('token', data.access_token);
+  return data;
+}
+
 async function ensureAuth(email='demo@demo.com', password='demo123'){
   const t = getToken();
   if(t) return t;
@@ -53,4 +82,8 @@ async function api(path, { method='GET', body, headers={} } = {}, _retried=false
   return res;
 }
 
-export { API_BASE, api, ensureAuth };
+function logout(){
+  localStorage.removeItem('token');
+}
+
+export { API_BASE, api, ensureAuth, logout, register, login };
