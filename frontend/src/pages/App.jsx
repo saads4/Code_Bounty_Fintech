@@ -5,10 +5,11 @@ import Budget from './Budget.jsx'
 import Credit from './Credit.jsx'
 import Taxes from './Taxes.jsx'
 import FinBot from './FinBot.jsx'
+import Profile from './Profile.jsx'
 import Login from './Login.jsx'
 import { logout } from '../lib/api.js'
 
-const TABS = ['Dashboard','Budget','Credit','Taxes','FinBot']
+const TABS = ['Dashboard','Budget','Credit','Taxes','FinBot','Profile']
 
 export default function App(){
   const [tab, setTab] = useState('Dashboard')
@@ -43,6 +44,7 @@ export default function App(){
         {tab==='Credit' && <Credit onToast={setToast}/>}
         {tab==='Taxes' && <Taxes onToast={setToast}/>}
         {tab==='FinBot' && <FinBot onToast={setToast}/>}
+        {tab==='Profile' && <Profile onToast={setToast}/>}
       </div>
 
       {toast && <div className="toast" onClick={()=>setToast('')}>{toast}</div>}

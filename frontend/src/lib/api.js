@@ -87,3 +87,17 @@ function logout(){
 }
 
 export { API_BASE, api, ensureAuth, logout, register, login };
+
+// Profile helpers
+async function getMe(){
+  return api('/api/users/me');
+}
+
+async function updateMe({ full_name, password }){
+  const body = {};
+  if(typeof full_name !== 'undefined') body.full_name = full_name;
+  if(password) body.password = password;
+  return api('/api/users/me', { method:'PUT', body });
+}
+
+export { getMe, updateMe };
