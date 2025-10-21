@@ -42,30 +42,31 @@ export default function Profile({ onToast }){
 
   if(loading){
     return (
-      <div>
+      <div className="card">
         <h2>Your Profile</h2>
-        <div className="small">Loading…</div>
+        <div className="skeleton" style={{height:12, width:180, marginTop:8}}></div>
+        <div className="skeleton" style={{height:12, width:240, marginTop:8}}></div>
       </div>
     )
   }
 
   return (
-    <div>
+    <div className="card">
       <h2>Your Profile</h2>
-      <form onSubmit={handleSave} style={{maxWidth:480, marginTop:12}}>
-        <div className="form-row">
-          <label>Email (read-only)</label>
-          <input type="email" value={email} readOnly />
+      <form onSubmit={handleSave} className="space-y-4 mt-3 max-w-xl">
+        <div>
+          <label className="block text-xs text-[#aeb7d4] mb-1">Email (read-only)</label>
+          <input className="input" type="email" value={email} readOnly />
         </div>
-        <div className="form-row">
-          <label>Full name</label>
-          <input type="text" value={fullName} onChange={e=>setFullName(e.target.value)} />
+        <div>
+          <label className="block text-xs text-[#aeb7d4] mb-1">Full name</label>
+          <input className="input" type="text" value={fullName} onChange={e=>setFullName(e.target.value)} />
         </div>
-        <div className="form-row">
-          <label>New password (optional)</label>
-          <input type="password" value={password} onChange={e=>setPassword(e.target.value)} placeholder="Leave blank to keep current" />
+        <div>
+          <label className="block text-xs text-[#aeb7d4] mb-1">New password (optional)</label>
+          <input className="input" type="password" value={password} onChange={e=>setPassword(e.target.value)} placeholder="Leave blank to keep current" />
         </div>
-        <button type="submit" className="btn" disabled={saving}>
+        <button type="submit" className="btn btn-primary" disabled={saving}>
           {saving ? 'Saving…' : 'Save Changes'}
         </button>
       </form>

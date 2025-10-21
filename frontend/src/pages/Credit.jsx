@@ -19,8 +19,8 @@ export default function Credit({ onToast }){
         <h3>Model Metrics</h3>
         {metrics ? (
           <div className="stack">
-            <div>AUC (Logistic Regression): <b>{metrics.auc_lr.toFixed(3)}</b></div>
-            <div>AUC (Random Forest): <b>{metrics.auc_rf.toFixed(3)}</b></div>
+            <div>AUC (Logistic Regression): <span className="badge" style={{borderColor:'#36d399', color:'#36d399'}}>{metrics.auc_lr.toFixed(3)}</span></div>
+            <div>AUC (Random Forest): <span className="badge" style={{borderColor:'#6ea8fe', color:'#6ea8fe'}}>{metrics.auc_rf.toFixed(3)}</span></div>
           </div>
         ) : <div className="small">Loading metrics…</div>}
       </div>
@@ -33,22 +33,22 @@ export default function Credit({ onToast }){
             <input className="input" type="number" step="any" value={form[k]} onChange={e=>setForm({...form,[k]:Number(e.target.value)})} />
           </div>
         ))}
-        <div style={{marginTop:8}}><button className="btn" onClick={runScore}>Score Credit Risk</button></div>
+        <div className="mt-2"><button className="btn btn-primary" onClick={runScore}>Score Credit Risk</button></div>
       </div>
 
       <div className="col-12 card">
         <h3>Default Probability & SHAP Explanation</h3>
         {score ? (
           <>
-            <div className="badge">Probability of Default: {(score.prob_default*100).toFixed(2)}%</div>
+            <div className="badge" style={{borderColor:'#ff8b8b', color:'#ff8b8b'}}>Probability of Default: {(score.prob_default*100).toFixed(2)}%</div>
             <div style={{height:320, marginTop:12}}>
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={shapData}>
                   <CartesianGrid stroke="#22305a" />
-                  <XAxis dataKey="name" />
-                  <YAxis />
-                  <Tooltip />
-                  <Bar dataKey="value" />
+                  <XAxis dataKey="name" stroke="#aeb7d4" tick={{ fill:'#aeb7d4' }} />
+                  <YAxis stroke="#aeb7d4" tick={{ fill:'#aeb7d4' }} />
+                  <Tooltip contentStyle={{ background:'#121a33', border:'1px solid #22305a', color:'#e8ecff' }} />
+                  <Bar dataKey="value" fill="#7a5af5" />
                 </BarChart>
               </ResponsiveContainer>
             </div>

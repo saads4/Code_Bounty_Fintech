@@ -33,7 +33,7 @@ export default function Taxes({ onToast }){
             <option value="new">New</option>
             <option value="old">Old</option>
           </select>
-          <button className="btn" onClick={compute}>Compute Tax</button>
+          <button className="btn btn-primary" onClick={compute}>Compute Tax</button>
         </div>
       </div>
 
@@ -41,11 +41,11 @@ export default function Taxes({ onToast }){
         <h3>Result</h3>
         {res ? (
           <div className="stack">
-            <div>Regime: <span className="badge">{res.regime}</span></div>
-            <div>Taxable Income: <b>₹ {Number(res.taxable_income).toLocaleString()}</b></div>
-            <div>Tax: <b>₹ {Number(res.tax).toLocaleString()}</b></div>
-            <div>Cess (4%): <b>₹ {Number(res.cess).toLocaleString()}</b></div>
-            <div>Total: <b>₹ {Number(res.total).toLocaleString()}</b></div>
+            <div>Regime: <span className="badge" style={{borderColor:'#3856a1', color:'#6ea8fe'}}>{res.regime}</span></div>
+            <div>Taxable Income: <b className="text-[#6ea8fe]">₹ {Number(res.taxable_income).toLocaleString()}</b></div>
+            <div>Tax: <b className="text-[#ff8b8b]">₹ {Number(res.tax).toLocaleString()}</b></div>
+            <div>Cess (4%): <b className="text-[#fbbf24]">₹ {Number(res.cess).toLocaleString()}</b></div>
+            <div>Total: <b className="text-[#36d399]">₹ {Number(res.total).toLocaleString()}</b></div>
             <div className="small">Std Deduction: ₹ {Number(res.details.std_deduction).toLocaleString()}</div>
           </div>
         ) : <div className="small">Enter values and compute.</div>}
@@ -54,8 +54,10 @@ export default function Taxes({ onToast }){
       {!useNew && (
         <div className="col-12 card">
           <h3>Potential Deductions (Old Regime)</h3>
-          <table><thead><tr><th>Section</th><th>Cap (₹)</th></tr></thead>
-          <tbody>{tips.map(([k,v])=> <tr key={k}><td>{k}</td><td>{Number(v).toLocaleString()}</td></tr>)}</tbody></table>
+          <table>
+            <thead><tr><th>Section</th><th>Cap (₹)</th></tr></thead>
+            <tbody>{tips.map(([k,v])=> <tr key={k}><td>{k}</td><td><span className="badge" style={{borderColor:'#7a5af5', color:'#bda7ff'}}>{Number(v).toLocaleString()}</span></td></tr>)}</tbody>
+          </table>
         </div>
       )}
     </div>

@@ -7,6 +7,7 @@ import Taxes from './Taxes.jsx'
 import FinBot from './FinBot.jsx'
 import Profile from './Profile.jsx'
 import Login from './Login.jsx'
+import Toast from '../components/Toast.jsx'
 import { logout } from '../lib/api.js'
 
 const TABS = ['Dashboard','Budget','Credit','Taxes','FinBot','Profile']
@@ -26,30 +27,40 @@ export default function App(){
   }
 
   return (
-    <div className="container">
-      <h1>FinEdge Pro</h1>
-      <div className="small">AI-powered personal finance • India tax ready • ML insights</div>
-      <div style={{marginTop:8, display:'flex', justifyContent:'flex-end'}}>
-        <button className="btn" onClick={()=>{ logout(); setAuthed(false); setToast('Signed out'); }}>Logout</button>
+    <>
+      <div className="header">
+        <div className="header-inner">
+          <div className="title">FinEdge Pro</div>
+          <div>
+            <button className="btn btn-secondary" onClick={()=>{ logout(); setAuthed(false); setToast('Signed out'); }}>Logout</button>
+          </div>
+        </div>
       </div>
-      <div className="nav" style={{marginTop:16}}>
-        {TABS.map(t => (
-          <div key={t} className={'tab' + (tab===t?' active':'')} onClick={()=>setTab(t)}>{t}</div>
-        ))}
+      <div className="container">
+        <div className="small">AI-powered personal finance • India tax ready • ML insights</div>
+        <div className="nav" style={{marginTop:16}}>
+          {TABS.map(t => (
+            <div
+              key={t}
+              className={'tab' + (tab===t?' active':'') + ' hover:brightness-110 focus:outline-none'}
+              onClick={()=>setTab(t)}
+            >
+              <span className={tab===t ? 'text-white' : 'text-[#c9d3ff]'}>{t}</span>
+            </div>
+          ))}
+        </div>
+
+        <div style={{marginTop:16}}>
+          {tab==='Dashboard' && <Dashboard onToast={setToast}/>}
+          {tab==='Budget' && <Budget onToast={setToast}/>}
+          {tab==='Credit' && <Credit onToast={setToast}/>}
+          {tab==='Taxes' && <Taxes onToast={setToast}/>}
+          {tab==='FinBot' && <FinBot onToast={setToast}/>}
+          {tab==='Profile' && <Profile onToast={setToast}/>}
+        </div>
+        <div className="footer">API docs: <a href="http://localhost:8000/docs" target="_blank">http://localhost:8000/docs</a></div>
       </div>
-
-      <div style={{marginTop:16}}>
-        {tab==='Dashboard' && <Dashboard onToast={setToast}/>}
-        {tab==='Budget' && <Budget onToast={setToast}/>}
-        {tab==='Credit' && <Credit onToast={setToast}/>}
-        {tab==='Taxes' && <Taxes onToast={setToast}/>}
-        {tab==='FinBot' && <FinBot onToast={setToast}/>}
-        {tab==='Profile' && <Profile onToast={setToast}/>}
-      </div>
-
-      {toast && <div className="toast" onClick={()=>setToast('')}>{toast}</div>}
-
-      <div className="footer">API docs: <a href="http://localhost:8000/docs" target="_blank">http://localhost:8000/docs</a></div>
-    </div>
+      <Toast message={toast} onClose={()=>setToast('')} type="info" />
+    </>
   )
 }

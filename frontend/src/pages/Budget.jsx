@@ -34,15 +34,15 @@ export default function Budget({ onToast }){
                     <option value="income">income</option>
                   </select>
                 </td>
-                <td><button className="btn" onClick={()=>del(i)}>Delete</button></td>
+                <td><button className="btn btn-secondary" onClick={()=>del(i)}>Delete</button></td>
               </tr>
             ))}
           </tbody>
         </table>
-        <div style={{marginTop:8}}>
-          <button className="btn" onClick={add}>Add Row</button>
-          <button className="btn" style={{marginLeft:8}} onClick={runCategorize}>Categorize</button>
-          <button className="btn" style={{marginLeft:8}} onClick={runRecommend}>Recommend Budgets</button>
+        <div className="mt-2 flex gap-2">
+          <button className="btn btn-secondary" onClick={add}>Add Row</button>
+          <button className="btn btn-primary" onClick={runCategorize}>Categorize</button>
+          <button className="btn btn-primary" onClick={runRecommend}>Recommend Budgets</button>
         </div>
       </div>
 
@@ -51,7 +51,12 @@ export default function Budget({ onToast }){
         <table>
           <thead><tr><th>Description</th><th>Predicted Category</th></tr></thead>
           <tbody>
-            {categorized.map((it,i)=>(<tr key={i}><td>{it.description}</td><td><span className="badge">{it.category_pred}</span></td></tr>))}
+            {categorized.map((it,i)=>(
+              <tr key={i}>
+                <td>{it.description}</td>
+                <td><span className="badge" style={{borderColor:'#3856a1', color:'#6ea8fe'}}>{it.category_pred}</span></td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
@@ -61,9 +66,9 @@ export default function Budget({ onToast }){
         {reco ? (
           <div className="stack">
             <div>Monthly Income: <b>₹ {Number(reco.monthly_income||0).toLocaleString()}</b></div>
-            <div>Essentials: <span className="badge">₹ {Number(reco.suggested.essentials).toLocaleString()}</span></div>
-            <div>Wants: <span className="badge">₹ {Number(reco.suggested.wants).toLocaleString()}</span></div>
-            <div>Savings: <span className="badge">₹ {Number(reco.suggested.savings).toLocaleString()}</span></div>
+            <div>Essentials: <span className="badge" style={{borderColor:'#7a5af5', color:'#bda7ff'}}>₹ {Number(reco.suggested.essentials).toLocaleString()}</span></div>
+            <div>Wants: <span className="badge" style={{borderColor:'#fbbf24', color:'#fbbf24'}}>₹ {Number(reco.suggested.wants).toLocaleString()}</span></div>
+            <div>Savings: <span className="badge" style={{borderColor:'#36d399', color:'#36d399'}}>₹ {Number(reco.suggested.savings).toLocaleString()}</span></div>
           </div>
         ) : <div className="small">Click “Recommend Budgets”.</div>}
       </div>

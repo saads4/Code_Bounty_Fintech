@@ -26,10 +26,22 @@ export default function Dashboard({ onToast }){
     <div className="grid">
       <div className="col-12">
         <div className="row">
-          <div className="card"><div className="kpi">Savings</div><div className="kpi v">₹ {Number(kpis.savings||0).toLocaleString()}</div></div>
-          <div className="card"><div className="kpi">Credit Score</div><div className="kpi v">{kpis.credit_score||'-'}</div></div>
-          <div className="card"><div className="kpi">Returns (est.)</div><div className="kpi v">{((kpis.returns||0)*100).toFixed(1)}%</div></div>
-          <div className="card"><div className="kpi">Tax Liability</div><div className="kpi v">₹ {Number(kpis.tax_liability||0).toLocaleString()}</div></div>
+          <div className="card">
+            <div className="kpi">Savings</div>
+            <div className="kpi v text-[#36d399]">₹ {Number(kpis.savings||0).toLocaleString()}</div>
+          </div>
+          <div className="card">
+            <div className="kpi">Credit Score</div>
+            <div className="kpi v text-[#6ea8fe]">{kpis.credit_score||'-'}</div>
+          </div>
+          <div className="card">
+            <div className="kpi">Returns (est.)</div>
+            <div className="kpi v text-[#fbbf24]">{((kpis.returns||0)*100).toFixed(1)}%</div>
+          </div>
+          <div className="card">
+            <div className="kpi">Tax Liability</div>
+            <div className="kpi v text-[#ff8b8b]">₹ {Number(kpis.tax_liability||0).toLocaleString()}</div>
+          </div>
         </div>
       </div>
       <div className="col-12 card">
@@ -37,16 +49,16 @@ export default function Dashboard({ onToast }){
         <div style={{height:320}}>
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={series}>
-              <Line type="monotone" dataKey="val" />
+              <Line type="monotone" dataKey="val" stroke="#6ea8fe" strokeWidth={2} dot={false} />
               <CartesianGrid stroke="#22305a" />
-              <XAxis dataKey="x" />
-              <YAxis />
-              <Tooltip />
+              <XAxis dataKey="x" stroke="#aeb7d4" tick={{ fill:'#aeb7d4' }} />
+              <YAxis stroke="#aeb7d4" tick={{ fill:'#aeb7d4' }} />
+              <Tooltip contentStyle={{ background:'#121a33', border:'1px solid #22305a', color:'#e8ecff' }} />
             </LineChart>
           </ResponsiveContainer>
         </div>
-        <div style={{marginTop:12}}>
-          <button className="btn" onClick={predict}>Predict Next Return</button>
+        <div className="mt-3">
+          <button className="btn btn-primary" onClick={predict}>Predict Next Return</button>
         </div>
       </div>
     </div>
