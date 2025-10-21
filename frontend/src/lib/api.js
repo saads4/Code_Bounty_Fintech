@@ -35,12 +35,20 @@ async function login(email, password){
 async function ensureAuth(email='demo@demo.com', password='demo123'){
   const t = getToken();
   if(t) return t;
-  // try register, else login
+  // Use a unique, persisted demo email to avoid collisions
+  const persistedEmail = localStorage.getItem('demo_email') || email || `demo+${Date.now()}@demo.com`;
+  if(!localStorage.getItem('demo_email')){
+    // If using the default demo email, generate a unique one
+    const uniqueEmail = email === 'demo@demo.com' ? `demo+${Date.now()}@demo.com` : persistedEmail;
+    localStorage.setItem('demo_email', uniqueEmail);
+  }
+  const finalEmail = localStorage.getItem('demo_email') || persistedEmail;
+
   const h = { 'Content-Type':'application/json' };
   try{
     const r = await fetch(`${API_BASE}/api/auth/register`, {
       method:'POST', headers:h,
-      body: JSON.stringify({ email, password, full_name:'Demo User' })
+      body: JSON.stringify({ email: finalEmail, password, full_name:'Demo User' })
     });
     if(!r.ok) throw new Error(await r.text());
     const data = await r.json();
@@ -49,7 +57,7 @@ async function ensureAuth(email='demo@demo.com', password='demo123'){
   }catch(_){
     const r2 = await fetch(`${API_BASE}/api/auth/login`, {
       method:'POST', headers:h,
-      body: JSON.stringify({ email, password })
+      body: JSON.stringify({ email: finalEmail, password })
     });
     if(!r2.ok) throw new Error(await r2.text());
     const data2 = await r2.json();
@@ -68,6 +76,8 @@ async function api(path, { method='GET', body, headers={} } = {}, _retried=false
 
   // If 401 and we haven’t retried yet, ensure auth then retry once
   if(res.status === 401 && !_retried){
+    // Clear stale/invalid token so ensureAuth does not short-circuit
+    localStorage.removeItem('token');
     await ensureAuth();
     return api(path, { method, body, headers }, true);
   }

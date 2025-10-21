@@ -8,7 +8,7 @@ import FinBot from './FinBot.jsx'
 import Profile from './Profile.jsx'
 import Login from './Login.jsx'
 import Toast from '../components/Toast.jsx'
-import { logout } from '../lib/api.js'
+import { logout, ensureAuth } from '../lib/api.js'
 
 const TABS = ['Dashboard','Budget','Credit','Taxes','FinBot','Profile']
 
@@ -18,8 +18,15 @@ export default function App(){
   const [authed, setAuthed] = useState(false)
 
   useEffect(()=>{
-    const t = localStorage.getItem('token')
-    setAuthed(!!t)
+    (async ()=>{
+      try{
+        // Proactively ensure a valid token at app start
+        await ensureAuth();
+        setAuthed(true);
+      }catch(_){
+        setAuthed(false);
+      }
+    })()
   },[])
 
   if(!authed){
