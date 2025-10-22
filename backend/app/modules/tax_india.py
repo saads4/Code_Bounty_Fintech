@@ -25,8 +25,14 @@ def slab_tax_old(income: float)->float:
     return tax
 
 def compute_tax(income: float, deductions: float=0.0, use_new: bool=True)->dict:
+    # Apply salary threshold: if income <= 12,75,000 then tax is zero; else apply slabs
     std_ded = 50000.0 if not use_new else 75000.0
     taxable = max(0.0, income - std_ded - (0.0 if use_new else deductions))
+    if income <= 1275000.0:
+        tax = 0.0
+        cess = 0.0
+        total = 0.0
+        return {"regime":"new" if use_new else "old","taxable_income":taxable,"tax":tax,"cess":cess,"total":total,"details":{"std_deduction":std_ded,"other_deductions":0.0 if use_new else deductions}}
     tax = slab_tax_new(taxable) if use_new else slab_tax_old(taxable)
     cess = 0.04*tax; total = tax + cess
     return {"regime":"new" if use_new else "old","taxable_income":taxable,"tax":tax,"cess":cess,"total":total,"details":{"std_deduction":std_ded,"other_deductions":0.0 if use_new else deductions}}

@@ -50,7 +50,38 @@ class CreditModel:
         shap_vals = []
         if self.explainer and shap:
             try:
-                shap_vals = self.explainer.shap_values(x)[1][0].tolist()
+                # Try legacy API (list for binary classification)
+                sv = self.explainer.shap_values(x)
+                if isinstance(sv, list):
+                    # Use class 1 if available
+                    if len(sv) > 1:
+                        shap_vals = sv[1][0].tolist()
+                    else:
+                        shap_vals = sv[0][0].tolist()
+                else:
+                    # Array returned
+                    shap_vals = sv[0].tolist()
             except Exception:
-                shap_vals = []
+                try:
+                    # Try newer API returning Explanation object
+                    ex = self.explainer(x)
+                    shap_vals = getattr(ex, 'values', None)
+                    if shap_vals is not None:
+                        shap_vals = np.array(shap_vals)[0].tolist()
+                    else:
+                        shap_vals = []
+                except Exception:
+                    shap_vals = []
+        # Fallback: if no SHAP values, provide feature importances as proxy
+        if not shap_vals:
+            try:
+                importances = getattr(self.rf, 'feature_importances_', None)
+                if importances is not None:
+                    shap_vals = importances.tolist()
+                else:
+                    # Fallback to logistic coefficients aligned to cols
+                    coefs = getattr(self.lr, 'coef_', None)
+                    shap_vals = coefs[0].tolist() if coefs is not None else [0]*len(cols)
+            except Exception:
+                shap_vals = [0]*len(cols)
         return {"prob_default": prob, "shap": {"features": cols, "values": shap_vals}}

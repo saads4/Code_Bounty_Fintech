@@ -28,7 +28,7 @@ class TickerRecommendation:
 _THIS_FILE = Path(__file__).resolve()
 # modules -> app -> backend -> repo_root
 _REPO_ROOT = _THIS_FILE.parents[3]
-_MODEL_DIR = _REPO_ROOT / "new model"
+_MODEL_DIR = _REPO_ROOT / "new feature" / "new model"
 _MODEL_FILE = _MODEL_DIR / "model.pkl"
 _PORTFOLIO_FILE = _MODEL_DIR / "portfolio.json"
 
