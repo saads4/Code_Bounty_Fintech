@@ -19,36 +19,45 @@ export default function Credit({ onToast }){
         <h3>Model Metrics</h3>
         {metrics ? (
           <div className="stack">
-            <div>AUC (Logistic Regression): <span className="badge" style={{borderColor:'#36d399', color:'#36d399'}}>{metrics.auc_lr.toFixed(3)}</span></div>
-            <div>AUC (Random Forest): <span className="badge" style={{borderColor:'#6ea8fe', color:'#6ea8fe'}}>{metrics.auc_rf.toFixed(3)}</span></div>
+            <div>AUC (Logistic Regression): <span className="badge" style={{borderColor:'#10B981', color:'#10B981'}} title="Good model performance">{metrics.auc_lr.toFixed(3)}</span></div>
+            <div>AUC (Random Forest): <span className="badge" style={{borderColor:'#10B981', color:'#10B981'}} title="Good model performance">{metrics.auc_rf.toFixed(3)}</span></div>
           </div>
         ) : <div className="small">Loading metrics…</div>}
       </div>
 
       <div className="col-6 card">
         <h3>Input Features</h3>
-        {Object.keys(form).map(k=>(
-          <div key={k} className="stack">
+        {Object.keys(form).map((k,i)=>(
+          <div key={k} className="stack" style={{background:i%2===0?'rgba(165,180,252,0.05)':'transparent',padding:'8px',borderRadius:'6px',borderBottom:'1px solid rgba(67,56,202,0.3)'}}>
             <div className="label">{k}</div>
             <input className="input" type="number" step="any" value={form[k]} onChange={e=>setForm({...form,[k]:Number(e.target.value)})} />
           </div>
         ))}
-        <div className="mt-2"><button className="btn btn-primary" onClick={runScore}>Score Credit Risk</button></div>
+        <div className="mt-2" style={{alignSelf:'flex-start'}}>
+          <button className="btn btn-primary" onClick={runScore} aria-label="Score credit risk button">
+            Score Credit Risk
+          </button>
+        </div>
       </div>
 
       <div className="col-12 card">
         <h3>Default Probability & SHAP Explanation</h3>
         {score ? (
           <>
-            <div className="badge" style={{borderColor:'#ff8b8b', color:'#ff8b8b'}}>Probability of Default: {(score.prob_default*100).toFixed(2)}%</div>
+            <div style={{marginBottom:'16px'}}>
+              <div style={{fontWeight:'bold',fontSize:'18px',marginBottom:'8px'}}>Probability of Default: <span style={{color:'#ff8b8b'}}>{(score.prob_default*100).toFixed(2)}%</span></div>
+              <div style={{width:'100%',height:'24px',background:'#1E1B3A',borderRadius:'12px',overflow:'hidden',border:'1px solid #A5B4FC'}}>
+                <div style={{width:`${(score.prob_default*100).toFixed(2)}%`,height:'100%',background:'linear-gradient(to right, #A78BFA, #8B5CF6)',transition:'width 0.3s ease'}}></div>
+              </div>
+            </div>
             <div style={{height:320, marginTop:12}}>
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={shapData}>
-                  <CartesianGrid stroke="#22305a" />
-                  <XAxis dataKey="name" stroke="#aeb7d4" tick={{ fill:'#aeb7d4' }} />
-                  <YAxis stroke="#aeb7d4" tick={{ fill:'#aeb7d4' }} />
-                  <Tooltip contentStyle={{ background:'#121a33', border:'1px solid #22305a', color:'#e8ecff' }} />
-                  <Bar dataKey="value" fill="#7a5af5" />
+                  <CartesianGrid stroke="#A5B4FC" strokeOpacity={0.2} />
+                  <XAxis dataKey="name" stroke="#E2E8F0" tick={{ fill:'#E2E8F0', fontSize:12 }} />
+                  <YAxis stroke="#E2E8F0" tick={{ fill:'#E2E8F0', fontSize:12 }} />
+                  <Tooltip contentStyle={{ background:'#2a2750', border:'1px solid #A5B4FC', color:'#FFFFFF' }} />
+                  <Bar dataKey="value" fill="#A78BFA" stroke="#FFFFFF" strokeWidth={1} />
                 </BarChart>
               </ResponsiveContainer>
             </div>

@@ -25,21 +25,29 @@ export default function Dashboard({ onToast }){
   return (
     <div className="grid">
       <div className="col-12">
-        <div className="row">
+        <div className="row" style={{gap:'16px'}}>
           <div className="card">
-            <div className="kpi">Savings</div>
-            <div className="kpi v text-[#36d399]">₹ {Number(kpis.savings||0).toLocaleString()}</div>
+            <div className="kpi" style={{display:'flex',alignItems:'center',gap:'6px'}}>
+              <span style={{fontSize:'20px'}}>₹</span> Savings
+            </div>
+            <div className="kpi v text-[#61D29A]">₹ {Number(kpis.savings||0).toLocaleString()}</div>
           </div>
           <div className="card">
-            <div className="kpi">Credit Score</div>
-            <div className="kpi v text-[#6ea8fe]">{kpis.credit_score||'-'}</div>
+            <div className="kpi" style={{display:'flex',alignItems:'center',gap:'6px'}}>
+              <span style={{fontSize:'20px'}}>★</span> Credit Score
+            </div>
+            <div className="kpi v text-[#C4B5FD]">{kpis.credit_score||'-'}</div>
           </div>
           <div className="card">
-            <div className="kpi">Returns (est.)</div>
-            <div className="kpi v text-[#fbbf24]">{((kpis.returns||0)*100).toFixed(1)}%</div>
+            <div className="kpi" style={{display:'flex',alignItems:'center',gap:'6px'}}>
+              <span style={{fontSize:'20px'}}>%</span> Returns (est.)
+            </div>
+            <div className="kpi v text-[#61D29A]">{((kpis.returns||0)*100).toFixed(1)}%</div>
           </div>
           <div className="card">
-            <div className="kpi">Tax Liability</div>
+            <div className="kpi" style={{display:'flex',alignItems:'center',gap:'6px'}}>
+              <span style={{fontSize:'20px'}}>₹</span> Tax Liability
+            </div>
             <div className="kpi v text-[#ff8b8b]">₹ {Number(kpis.tax_liability||0).toLocaleString()}</div>
           </div>
         </div>
@@ -49,16 +57,18 @@ export default function Dashboard({ onToast }){
         <div style={{height:320}}>
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={series}>
-              <Line type="monotone" dataKey="val" stroke="#6ea8fe" strokeWidth={2} dot={false} />
-              <CartesianGrid stroke="#22305a" />
-              <XAxis dataKey="x" stroke="#aeb7d4" tick={{ fill:'#aeb7d4' }} />
-              <YAxis stroke="#aeb7d4" tick={{ fill:'#aeb7d4' }} />
-              <Tooltip contentStyle={{ background:'#121a33', border:'1px solid #22305a', color:'#e8ecff' }} />
+              <Line type="monotone" dataKey="val" stroke="#A5B4FC" strokeWidth={3} dot={false} />
+              <CartesianGrid stroke="#A5B4FC" strokeOpacity={0.2} />
+              <XAxis dataKey="x" stroke="#E2E8F0" tick={{ fill:'#E2E8F0', fontSize:12 }} style={{textShadow:'0 1px rgba(255,255,255,0.5)'}} />
+              <YAxis stroke="#E2E8F0" tick={{ fill:'#E2E8F0', fontSize:12 }} style={{textShadow:'0 1px rgba(255,255,255,0.5)'}} />
+              <Tooltip contentStyle={{ background:'#2a2750', border:'1px solid #A5B4FC', color:'#FFFFFF' }} />
             </LineChart>
           </ResponsiveContainer>
         </div>
         <div className="mt-3">
-          <button className="btn btn-primary" onClick={predict}>Predict Next Return</button>
+          <button className="btn btn-primary" onClick={predict} aria-label="Predict next return button">
+            Predict Next Return <span style={{fontSize:'18px'}}>↑</span>
+          </button>
         </div>
       </div>
     </div>

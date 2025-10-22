@@ -28,12 +28,12 @@ export default function Taxes({ onToast }){
           <input className="input" type="number" value={income} onChange={e=>setIncome(Number(e.target.value))}/>
           <div className="label">Deductions (₹) — old regime</div>
           <input className="input" type="number" value={deductions} onChange={e=>setDeductions(Number(e.target.value))}/>
-          <div className="label">Regime</div>
-          <select className="select" value={useNew ? 'new' : 'old'} onChange={e=>setUseNew(e.target.value==='new')}>
-            <option value="new">New</option>
-            <option value="old">Old</option>
+          <div className="label">Regime <span style={{fontSize:'14px'}}>⇄</span></div>
+          <select className="select" value={useNew ? 'new' : 'old'} onChange={e=>setUseNew(e.target.value==='new')} style={{marginRight:'8px'}} aria-label="Select tax regime">
+            <option value="new">✨ New Regime</option>
+            <option value="old">📜 Old Regime</option>
           </select>
-          <button className="btn btn-primary" onClick={compute}>Compute Tax</button>
+          <button className="btn btn-primary" onClick={compute} aria-label="Compute tax">Compute Tax</button>
         </div>
       </div>
 
@@ -41,12 +41,20 @@ export default function Taxes({ onToast }){
         <h3>Result</h3>
         {res ? (
           <div className="stack">
-            <div>Regime: <span className="badge" style={{borderColor:'#3856a1', color:'#6ea8fe'}}>{res.regime}</span></div>
-            <div>Taxable Income: <b className="text-[#6ea8fe]">₹ {Number(res.taxable_income).toLocaleString()}</b></div>
-            <div>Tax: <b className="text-[#ff8b8b]">₹ {Number(res.tax).toLocaleString()}</b></div>
-            <div>Cess (4%): <b className="text-[#fbbf24]">₹ {Number(res.cess).toLocaleString()}</b></div>
-            <div>Total: <b className="text-[#36d399]">₹ {Number(res.total).toLocaleString()}</b></div>
-            <div className="small">Std Deduction: ₹ {Number(res.details.std_deduction).toLocaleString()}</div>
+            <div style={{padding:'12px',background:'rgba(165,180,252,0.1)',borderRadius:'8px',marginBottom:'12px'}}>
+              <div style={{fontSize:'14px',color:'#E2E8F0',marginBottom:'4px'}}>Regime</div>
+              <div style={{fontSize:'16px',fontWeight:'bold',color:'#C4B5FD'}}>{res.regime}</div>
+            </div>
+            <details style={{marginBottom:'12px'}}>
+              <summary style={{cursor:'pointer',fontWeight:'bold',color:'#A5B4FC',marginBottom:'8px'}}>Breakdown</summary>
+              <div className="stack" style={{paddingLeft:'16px',marginTop:'8px'}}>
+                <div>Taxable Income: <b style={{color:'#C4B5FD'}}>₹ {Number(res.taxable_income).toLocaleString()}</b></div>
+                <div className="small">Std Deduction: ₹ {Number(res.details.std_deduction).toLocaleString()}</div>
+              </div>
+            </details>
+            <div style={{fontSize:'18px'}}>Tax: <b style={{color:'#EF4444'}}>₹ {Number(res.tax).toLocaleString()}</b></div>
+            <div style={{fontSize:'18px'}}>Cess (4%): <b style={{color:'#10B981'}}>₹ {Number(res.cess).toLocaleString()}</b></div>
+            <div style={{fontSize:'20px',fontWeight:'bold',marginTop:'8px',padding:'12px',background:'rgba(16,185,129,0.1)',borderRadius:'8px'}}>Total: <span style={{color:'#10B981'}}>₹ {Number(res.total).toLocaleString()}</span></div>
           </div>
         ) : <div className="small">Enter values and compute.</div>}
       </div>

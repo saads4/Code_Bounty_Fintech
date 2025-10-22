@@ -24,6 +24,9 @@ numpy==2.1.3
 scikit-learn==1.7.2
 joblib==1.4.2
 matplotlib==3.9.2
+yfinance==0.2.40
+feedparser==6.0.11
+textblob==0.18.0
 
 # Optional accelerators (comment in if you want)
 # torch==2.4.1

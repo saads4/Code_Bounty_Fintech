@@ -5,12 +5,13 @@ import Budget from './Budget.jsx'
 import Credit from './Credit.jsx'
 import Taxes from './Taxes.jsx'
 import FinBot from './FinBot.jsx'
+import Portfolio from './Portfolio.jsx'
 import Profile from './Profile.jsx'
 import Login from './Login.jsx'
 import Toast from '../components/Toast.jsx'
 import { logout, ensureAuth } from '../lib/api.js'
 
-const TABS = ['Dashboard','Budget','Credit','Taxes','FinBot','Profile']
+const TABS = ['Dashboard','Budget','Credit','Taxes','Portfolio','FinBot','Profile']
 
 export default function App(){
   const [tab, setTab] = useState('Dashboard')
@@ -52,7 +53,7 @@ export default function App(){
               className={'tab' + (tab===t?' active':'') + ' hover:brightness-110 focus:outline-none'}
               onClick={()=>setTab(t)}
             >
-              <span className={tab===t ? 'text-white' : 'text-[#c9d3ff]'}>{t}</span>
+              <span className={tab===t ? 'text-[#1E1B3A] font-semibold' : 'text-[#E2E8F0]'} style={{opacity: tab===t ? 1 : 0.9}}>{t}</span>
             </div>
           ))}
         </div>
@@ -62,6 +63,7 @@ export default function App(){
           {tab==='Budget' && <Budget onToast={setToast}/>}
           {tab==='Credit' && <Credit onToast={setToast}/>}
           {tab==='Taxes' && <Taxes onToast={setToast}/>}
+          {tab==='Portfolio' && <Portfolio onToast={setToast}/>}
           {tab==='FinBot' && <FinBot onToast={setToast}/>}
           {tab==='Profile' && <Profile onToast={setToast}/>}
         </div>

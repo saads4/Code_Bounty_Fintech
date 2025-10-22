@@ -5,9 +5,11 @@ import { getMe, updateMe } from '../lib/api.js'
 export default function Profile({ onToast }){
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
+  const [saved, setSaved] = useState(false)
   const [email, setEmail] = useState('')
   const [fullName, setFullName] = useState('')
   const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
 
   useEffect(()=>{
     (async ()=>{
@@ -26,13 +28,16 @@ export default function Profile({ onToast }){
   async function handleSave(e){
     e.preventDefault()
     setSaving(true)
+    setSaved(false)
     try{
       const body = { full_name: fullName }
       if(password) body.password = password
       const updated = await updateMe(body)
       setFullName(updated.full_name || '')
       setPassword('')
-      onToast?.('Profile updated')
+      setSaved(true)
+      onToast?.('Profile updated!')
+      setTimeout(()=>setSaved(false), 3000)
     }catch(err){
       onToast?.(String(err.message || err))
     }finally{
@@ -55,19 +60,45 @@ export default function Profile({ onToast }){
       <h2>Your Profile</h2>
       <form onSubmit={handleSave} className="space-y-4 mt-3 max-w-xl">
         <div>
-          <label className="block text-xs text-[#aeb7d4] mb-1">Email (read-only)</label>
-          <input className="input" type="email" value={email} readOnly />
+          <label className="block text-xs text-[#9CA3AF] mb-1" style={{fontStyle:'italic'}}>Email (read-only)</label>
+          <div style={{position:'relative'}}>
+            <input className="input" type="email" value={email} readOnly />
+            <button 
+              type="button"
+              onClick={()=>{navigator.clipboard.writeText(email);onToast?.('Email copied!')}}
+              style={{position:'absolute',right:'10px',top:'50%',transform:'translateY(-50%)',background:'none',border:'none',cursor:'pointer',fontSize:'16px'}}
+              aria-label="Copy email to clipboard"
+            >
+              📋
+            </button>
+          </div>
         </div>
         <div>
-          <label className="block text-xs text-[#aeb7d4] mb-1">Full name</label>
+          <label className="block text-xs text-[#E2E8F0] mb-1" style={{opacity:0.9}}>Full name</label>
           <input className="input" type="text" value={fullName} onChange={e=>setFullName(e.target.value)} />
         </div>
         <div>
-          <label className="block text-xs text-[#aeb7d4] mb-1">New password (optional)</label>
-          <input className="input" type="password" value={password} onChange={e=>setPassword(e.target.value)} placeholder="Leave blank to keep current" />
+          <label className="block text-xs text-[#E2E8F0] mb-1" style={{opacity:0.9}}>New Password</label>
+          <div style={{position:'relative'}}>
+            <input className="input" type={showPassword?'text':'password'} value={password} onChange={e=>setPassword(e.target.value)} placeholder="Leave blank to keep current" />
+            <button 
+              type="button"
+              onClick={()=>setShowPassword(!showPassword)}
+              style={{position:'absolute',right:'10px',top:'50%',transform:'translateY(-50%)',background:'none',border:'none',cursor:'pointer',fontSize:'16px'}}
+              aria-label="Toggle password visibility"
+            >
+              {showPassword?'👁️':'👁️‍🗨️'}
+            </button>
+          </div>
         </div>
-        <button type="submit" className="btn btn-primary" disabled={saving}>
-          {saving ? 'Saving…' : 'Save Changes'}
+        <button 
+          type="submit" 
+          className="btn" 
+          style={{background:saved?'#10B981':'linear-gradient(135deg,#A78BFA,#8B5CF6)',borderColor:saved?'#10B981':'#8B5CF6',color:'#FFFFFF'}}
+          disabled={saving}
+          aria-label="Save profile changes"
+        >
+          {saving ? 'Saving…' : saved ? '✓ Saved!' : 'Save Changes'}
         </button>
       </form>
     </div>
