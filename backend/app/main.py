@@ -7,7 +7,7 @@ from slowapi.util import get_remote_address
 
 from app.core.config import settings
 from app.core.security import add_security_headers
-from app.routes import auth, users, dashboard, investments, budget, credit, taxes, finbot, admin, portfolio
+from app.routes import auth, users, dashboard, investments, budget, credit, taxes, finbot, admin, stockmind
 from app.core.db import Base, engine
 # Import models so metadata knows about them before create_all
 from app.models import user as _user_model  # noqa: F401
@@ -45,7 +45,7 @@ app.include_router(credit.router, prefix="/api/credit", tags=["credit"])
 app.include_router(taxes.router, prefix="/api/taxes", tags=["taxes"])
 app.include_router(finbot.router, prefix="/api/finbot", tags=["finbot"])
 app.include_router(admin.router, prefix="/api/admin", tags=["admin"])
-app.include_router(portfolio.router)
+app.include_router(stockmind.router)
 
 @app.on_event("startup")
 def on_startup_create_tables():
