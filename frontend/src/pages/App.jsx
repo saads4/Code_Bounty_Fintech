@@ -53,7 +53,7 @@ export default function App(){
               className={'tab' + (tab===t?' active':'') + ' hover:brightness-110 focus:outline-none'}
               onClick={()=>setTab(t)}
             >
-              <span className={tab===t ? 'text-[#1E1B3A] font-semibold' : 'text-[#E2E8F0]'} style={{opacity: tab===t ? 1 : 0.9}}>{t}</span>
+              <span style={{opacity: tab===t ? 1 : 0.95, fontWeight: tab===t ? 600 : 500}}>{t}</span>
             </div>
           ))}
         </div>
