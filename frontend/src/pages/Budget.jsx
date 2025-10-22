@@ -19,7 +19,7 @@ export default function Budget({ onToast }){
     const categoryTotals = {}
     categorized.forEach(item => {
       const category = item.category_pred || 'Uncategorized'
-      const amount = items.find(i => i.description === item.description)?.amount || 0
+      const amount = Number(item.amount) || 0
       categoryTotals[category] = (categoryTotals[category] || 0) + amount
     })
     return Object.entries(categoryTotals).map(([name, value]) => ({ name, value }))

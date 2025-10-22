@@ -1,14 +1,5 @@
 {
-  "RELIANCE.NS": {
-    "buy_price": 2500.0,
-    "quantity": 10
-  },
-  "INFY.NS": {
-    "buy_price": 1400,
-    "quantity": 8
-  },
-  "TCS.NS": {
-    "buy_price": 3750,
-    "quantity": 5
-  }
+  "RELIANCE.NS": {"buy_price": 2500, "quantity": 3},
+  "INFY.NS": {"buy_price": 400, "quantity": 8},
+  "TCS.NS": {"buy_price": 3750, "quantity": 5}
 }
