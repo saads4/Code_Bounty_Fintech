@@ -9,8 +9,9 @@ import Profile from './Profile.jsx'
 import Login from './Login.jsx'
 import Toast from '../components/Toast.jsx'
 import { logout, ensureAuth } from '../lib/api.js'
+import Advisor from './Advisor.jsx'
 
-const TABS = ['Dashboard','Budget','Credit','Taxes','FinBot','Profile']
+const TABS = ['Dashboard','Budget','Credit','Taxes','FinBot','Advisor','Profile']
 
 export default function App(){
   const [tab, setTab] = useState('Dashboard')
@@ -63,6 +64,7 @@ export default function App(){
           {tab==='Credit' && <Credit onToast={setToast}/>}
           {tab==='Taxes' && <Taxes onToast={setToast}/>}
           {tab==='FinBot' && <FinBot onToast={setToast}/>}
+          {tab==='Advisor' && <Advisor onToast={setToast}/>}
           {tab==='Profile' && <Profile onToast={setToast}/>}
         </div>
         <div className="footer">API docs: <a href="http://localhost:8000/docs" target="_blank">http://localhost:8000/docs</a></div>

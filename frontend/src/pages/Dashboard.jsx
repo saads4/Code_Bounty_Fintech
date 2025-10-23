@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { api } from '../lib/api.js'
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts'
-import StockPrediction from '../components/StockPrediction.jsx'
 
 export default function Dashboard({ onToast }){
   const [kpis, setKpis] = useState({})
@@ -71,9 +70,6 @@ export default function Dashboard({ onToast }){
             Predict Next Return <span style={{fontSize:'18px'}}>↑</span>
           </button>
         </div>
-      </div>
-      <div className="col-12" style={{marginTop:16}}>
-        <StockPrediction onToast={onToast} />
       </div>
     </div>
   )
