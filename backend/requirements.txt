@@ -30,7 +30,6 @@ textblob==0.18.0
 
 # Optional accelerators (comment in if you want)
 # torch==2.4.1
-# shap==0.46.0
-# xgboost==2.1.1
+xgboost==2.1.1
 # langchain==0.2.16
 # bcrypt==4.1.2   # optional: faster hashing on supported hosts
